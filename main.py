@@ -1,77 +1,88 @@
 import time
+import os
 
-groccery_list = [];
+groccery_list = []
+
+def clear_screen():
+    # Clears the terminal for a cleaner look
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def UpdSequence():
+    if not groccery_list:
+        print("List is empty!")
+        return
+
+    for i, item in enumerate(groccery_list):
+        print(f"[{i + 1}] {item}")
+
+    try:
+        option = int(input("Select the element to update: "))
+        if 1 <= option <= len(groccery_list):
+            new_val = input("What value would you like to change it to?: ")
+            groccery_list[option - 1] = new_val
+            print("Updated! Returning to menu...")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Please enter a number.")
+    time.sleep(1)
 
 def DelSequence():
-    print("Please tell which element you would like to delete!")
+    if not groccery_list:
+        print("List is empty!")
+        return
 
-    for i in range( len(groccery_list) ):
-        print("[", ( i + 1), "]",  groccery_list[i])
+    for i, item in enumerate(groccery_list):
+        print(f"[{i + 1}] {item}")
 
-    option = int(input("Select the element you'd like to delete: "))
-
-    while True:
-        if groccery_list[option - 1]:
+    try:
+        option = int(input("Select the element to delete: "))
+        if 1 <= option <= len(groccery_list):
             groccery_list.pop(option - 1)
-            print("Successfully deleted that option! Going back to menu...")
-            time.sleep(1)
-            break
+            print("Deleted! Returning to menu...")
         else:
-            print("Are you sure this exists?")
-    ShowStart()
+            print("Invalid selection.")
+    except ValueError:
+        print("Please enter a number.")
+    time.sleep(1)
 
 def AddSequence():
+    print("Type [ END ] to stop adding.")
     while True:
-        try:
-            groccery = input("Please provide the groccery: ")
-
-            if groccery == "end":
-                print("Got it! Let's see the list...")
-                print(groccery_list)
-                break
-
-            groccery_list.append(groccery)
-        except:
-            print("An exception has occured!")
-    ShowStart()
+        item = input("Add grocery: ")
+        if item.lower() == "end":
+            break
+        groccery_list.append(item)
 
 def ShowList():
-    print("Here is the list! To go back to the menu, type [ END ]!")
+    clear_screen()
+    print("--- Current List ---")
+    for i, item in enumerate(groccery_list):
+        print(f"[{i + 1}] {item}")
+    input("\nPress Enter to go back...")
 
-    for i in range( len(groccery_list) ):
-        print("[", ( i + 1), "]",  groccery_list[i])
-
+def MainLoop():
     while True:
-        option = input("Your choice: ")
-        if option.lower() == "end":
-            ShowStart()
+        clear_screen()
+        print("Welcome to the grocery list program!")
+        print("[ ADD | SHOW | UPDATE | DELETE | EXIT ]")
+        
+        choice = input("Your choice: ").lower()
+
+        if choice == "add":
+            AddSequence()
+        elif choice == "show":
+            ShowList()
+        elif choice == "update":
+            UpdSequence()
+        elif choice == "delete":
+            DelSequence()
+        elif choice == "exit":
+            print("Bye!")
             break
         else:
-            print("unknown command?")
-
-def ShowStart():
-    print("\033[H\033[2J", end="")
-    print("Welcome to the grocerry list program!")
-    print("Please provide what you want to do:")
-    print("[ ADD ] to add stuff to the list!")
-    print("[ DELETE ] to delete stuff from the list!")
-    print("[ SHOW ] to show the list")
-
-    option = input("Your choice: ")
-
-    match option.lower():
-        case "add":
-            AddSequence()
-
-        case "show":
-            ShowList()
-
-        case "delete":
-            DelSequence()
-
-        case _:
-            print("Unknown command?")
+            print("Unknown command.")
             time.sleep(1)
-            ShowStart()
 
-ShowStart()
+if __name__ == "__main__":
+    MainLoop()
