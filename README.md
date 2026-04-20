@@ -9,4 +9,4 @@ git clone https://github.com/SillyFeline/grocery-list.git
 cd grocery-list
 python main.py
 ```
-### Or use python3 if needed! 
+###### Or use python3 if needed! 
